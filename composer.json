@@ -4,11 +4,11 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.1.*",
-		"way/generators": "dev-master"
+		"laravel/framework": "4.1.*"
 	},
 	"require-dev": {
-		"jason-morton-nz/laravel-grunt": "dev-master"
+		"jason-morton-nz/laravel-grunt": "dev-master",
+		"way/generators": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
