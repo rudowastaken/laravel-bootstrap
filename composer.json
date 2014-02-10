@@ -9,7 +9,8 @@
 	"require-dev": {
 		"jason-morton-nz/laravel-grunt": "dev-master",
 		"way/generators": "dev-master",
-		"codeception/codeception": "dev-master"
+		"codeception/codeception": "dev-master",
+		"itsgoingd/clockwork": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
