@@ -2,7 +2,7 @@
 
 class BaseController extends Controller {
 
-	public __construct()
+	public function __construct()
 	{
 		$this->beforeFilter(function()
 		{
