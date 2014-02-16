@@ -22,7 +22,7 @@ echo "--- Updating packages list ---"
 sudo apt-get update
 
 echo "--- Installing PHP-specific packages ---"
-sudo apt-get install -y php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt mysql-server-5.5 php5-mysql git-core
+sudo apt-get install -y php5 apache2 libapache2-mod-php5 php5-curl php5-gd php5-mcrypt mysql-server-5.5 php5-mysql php5-sqlite git-core
 
 echo "--- Installing and configuring Xdebug ---"
 sudo apt-get install -y php5-xdebug
@@ -70,6 +70,66 @@ sudo sed -i 's=:/bin:=:/bin:/sbin:=' /home/vagrant/.zshrc
 
 # Change vagrant user's default shell
 chsh vagrant -s $(which zsh);
+
+echo "--- Editing PATH ---"
+echo 'PATH=vendor/bin:$PATH' >> /home/vagrant/.zshrc
+
+echo "--- Creating Aliases ---"
+cat << EOF | tee -a /home/vagrant/.zshrc
+alias ls="ls -lhF ${colorflag}"
+alias lsd="ls -lhF ${colorflag}  | grep \"^d\""
+alias la="ls -lahF ${colorflag}"
+alias cs=". /usr/bin/cdls.hr"
+
+export LS_COLORS='no=00:fi=00:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:'
+
+
+# Easier navigation: .., ..., ...., ....., ~ and -
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+#Git aliases
+alias gs="git status"
+alias ga="git add"
+alias gaa="git add ."
+alias gc="git commit"
+
+#Artisan aliases
+alias g:c="php artisan generate:controller"
+alias g:m="php artisan generate:model"
+alias g:v="php artisan generate:view"
+alias g:mig="php artisan generate:migration"
+alias g:a="php artisan generate:assets"
+alias g:t="php artisan generate:test"
+alias g:r="php artisan generate:resource"
+
+#Codeception aliases
+alias cr="codecept run"
+
+#Disable autocorrect
+unsetopt correct_all
+
+# Create a new directory and enter it
+function mkd() {
+        mkdir -p "$@" && cd "$@"
+}
+
+# Determine size of a file or total size of a directory
+function fs() {
+        if du -b /dev/null > /dev/null 2>&1; then
+                local arg=-sbh
+        else
+                local arg=-sh
+        fi
+        if [[ -n "$@" ]]; then
+                du $arg -- "$@"
+        else
+                du $arg .[^.]* *
+        fi
+}
+EOF
 
 # Laravel stuff
 # Load Composer packages
