@@ -54,6 +54,22 @@ echo "--- Composer is the future. But you knew that, did you master? Nice job. -
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
+echo "--- Adding oh-my-zsh ---"
+# Install zsh
+sudo apt-get install -y zsh
+
+# Install oh-my-zsh
+sudo su - vagrant -c 'wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh'
+
+# Set to "blinks" theme which
+# uses Solarized and shows user/host
+sudo sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="blinks"/' /home/vagrant/.zshrc
+# Add /sbin to PATH
+sudo sed -i 's=:/bin:=:/bin:/sbin:=' /home/vagrant/.zshrc
+
+# Change vagrant user's default shell
+chsh vagrant -s $(which zsh);
+
 # Laravel stuff
 # Load Composer packages
 cd /var/www
