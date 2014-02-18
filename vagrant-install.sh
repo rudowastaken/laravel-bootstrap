@@ -62,7 +62,7 @@ sudo apt-get install -y zsh
 # Install oh-my-zsh
 sudo su - vagrant -c 'wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh'
 
-# Set to "amuse" theme which
+# Set to "blinks" theme which
 # uses Solarized and shows user/host
 sudo sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="blinks"/' /home/vagrant/.zshrc
 # Add /sbin to PATH
@@ -73,6 +73,20 @@ chsh vagrant -s $(which zsh);
 
 echo "--- Editing PATH ---"
 echo 'PATH=vendor/bin:$PATH' >> /home/vagrant/.zshrc
+
+echo "--- Setting up local and testing database with external access ---"
+sudo sed -i 's/#skip-external-locking/skip-external-locking/' /etc/mysql/my.cnf
+sudo sed -i 's/#bind-address/bind-address/' /etc/mysql/my.cnf
+sudo sed -i 's/127.0.0.1/0.0.0.0/' /etc/mysql/my.cnf
+
+echo "CREATE DATABASE testdb" | mysql -uroot -proot
+echo "CREATE DATABASE develdb" | mysql -uroot -proot
+echo "create user 'root'@'10.0.2.2' identified by 'root';" | mysql -uroot -proot
+echo "grant all privileges on *.* to 'root'@'10.0.2.2' with grant option;" | mysql -uroot -proot
+echo "flush privileges;" | mysql -uroot -proot
+
+echo "--- Restarting mysql ---"
+sudo service mysql restart
 
 echo "--- Creating Aliases ---"
 cat << EOF | tee -a /home/vagrant/.zshrc
@@ -107,6 +121,9 @@ alias g:r="php artisan generate:resource"
 
 #Codeception aliases
 alias cr="codecept run"
+alias cra="codecept run acceptance"
+alias crf="codecept run functional"
+alias cru="codecept run unit"
 
 #Disable autocorrect
 unsetopt correct_all
@@ -133,8 +150,10 @@ EOF
 
 # Laravel stuff
 # Load Composer packages
-cd /var/www
-composer install --dev
+# cd /var/www
+# composer install --dev
+# php artisan migrate --seed --env="development"
+# php artisan migrate --seed --env="testing"
 
 
 echo "--- All set to go! Would you like to play a game? ---"
