@@ -125,6 +125,10 @@ alias cra="codecept run acceptance"
 alias crf="codecept run functional"
 alias cru="codecept run unit"
 
+#PHPSpec aliases
+alias psrv="phpspec run --verbose"
+alias psr="phpspec run"
+
 #Disable autocorrect
 unsetopt correct_all
 
