@@ -55,6 +55,9 @@ echo "--- Composer is the future. But you knew that, did you master? Nice job. -
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
+echo "--- Adding Laravel's Envoy ---"
+composer global require "laravel/envoy=~1.0"
+
 echo "--- Adding oh-my-zsh ---"
 # Install zsh
 sudo apt-get install -y zsh
@@ -72,7 +75,7 @@ sudo sed -i 's=:/bin:=:/bin:/sbin:=' /home/vagrant/.zshrc
 chsh vagrant -s $(which zsh);
 
 echo "--- Editing PATH ---"
-echo 'PATH=vendor/bin:$PATH' >> /home/vagrant/.zshrc
+echo 'PATH=vendor/bin:/home/vagrant/.composer/vendor/bin:$PATH' >> /home/vagrant/.zshrc
 
 echo "--- Setting up local and testing database with external access ---"
 sudo sed -i 's/#skip-external-locking/skip-external-locking/' /etc/mysql/my.cnf
